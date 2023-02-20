@@ -4,7 +4,7 @@ import textarea_autosize from '@massimo-cassandro/js-utilities';
 
 // ckeditor e fileUploader vanno caricati nell'implementazione locale
 
-export default function (mAlert) {
+export function contenuti_scheda(mAlert) {
 
   textarea_autosize();
 
