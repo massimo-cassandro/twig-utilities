@@ -1,0 +1,22 @@
+{% set pagID = 'contenuti_elenco' %}
+{% set controller = pagID %}
+{% set fluid_container = false %}
+{% extends 'backoffice/_backoffice-tpl.html.twig' %}
+
+{% block title %}Contenuti del sito{% endblock %}
+{% block head %}{% endblock head %}
+{% block body_end %}{% endblock body_end %}
+
+{##}
+
+{% block body %}
+  <h1>{{- block('title') -}}</h1>
+
+  {% include 'backoffice/contenuti/contenuti-elenco.incl.html.twig' with {
+    azzera_filtri_btn_class: 'btn btn-outline-secondary',
+    route_json: 'backoffice_contenuti_elenco_json',
+    route_scheda: 'backoffice_contenuti_scheda',
+    fw: glob_vars.fw is defined? glob_vars.fw : 'bs4'
+  } %}
+
+{% endblock body %}
