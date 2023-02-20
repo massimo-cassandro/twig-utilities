@@ -1,1 +1,2 @@
 2023-02-17T11:26:50.123Z |      1.0.0 | First version from old package `m-utilities`
+2023-02-20T12:08:35.125Z |      1.0.1 | naming fix
