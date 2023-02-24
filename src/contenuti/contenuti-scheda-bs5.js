@@ -1,5 +1,5 @@
 import {slideToggle} from '@massimo-cassandro/js-utilities';
-import textarea_autosize from '@massimo-cassandro/js-utilities';
+import {textarea_autosize} from '@massimo-cassandro/js-utilities';
 
 
 // ckeditor e fileUploader vanno caricati nell'implementazione locale
