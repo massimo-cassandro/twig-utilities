@@ -1,17 +1,7 @@
-// TODO aggiungere hr e wr
-
-
 {#
   TAG PICTURE PER IMMAGINI DA VIEWER
-  v. 4
+  v. 4.1
   ===================================
-
-  Se preload = true, restituisce un oggetto composto da:
-    {
-      img: ==> tag picture, img, source, ...
-      preload: ==> tag link preload, ...
-    }
-
 
   {%- include '@includes/imgs_viewer.html.twig' with {
     img: img_obj,
@@ -22,18 +12,19 @@
       md: {w:  991, h: xxx, img: null},
       sm: {w:  767, h: xxx, img: null},
       xs: {w:  575, h: xxx, img: null},
-      lg_xl
+      xl_xxl: {w: 1200, hr: 16/9},       <== h = w * hr
+      lg_xl:  {w: 4/3, h: 600},          <== w = h * wr
       md_xl
       md_lg
       xs_sm
       all
     },
     lqip: null,                              // low quality img placeholder, ignorato se svg
-    add_default_sizes: false,                // default
+    add_img_sizes: true,                     // default
     class: 'img-fluid',
-    lazyload: true,                          // facoltativo, default true,
+    lazyload: true,                          // facoltativo, default true (ignorato se native_lazyload = true),
+    native_lazyload: true,                   // facoltativo, default true,
     async: true,                             // facoltativo, default true,
-    preload: false,                          // facoltativo, default false, attiva il preload
     attrs: null,                             // attributi extra facoltativi
     viewer: path('inner_viewer') ~ '/',      // <== default glob_vars.viewer
     viewer_extra_params: ['fd=1', 'ext=1', 'alpha=1'], // <== array di eventuali parametri da aggiungere al viewer, ignorato se svg
@@ -61,12 +52,16 @@
 
       all: {w: 700, h: null, img: img_obj} <== omette l'attributo media (non scrive il tag source)
                                                se presente, non aggiungere altri brekpoiints
+
+      xxl: {w: 300, hr: 4/3}    <== calcola il valore h moltiplicando w * hr
     }
 
-    add_default_sizes: se true al tag img vengono aggiunte width e height (dimensioni
-                       del file originale). Per non avere distorsioni dell'immagine
-                       è necessario che sia presente una sola dimensione (tipicamente la base)
-                       per tutti i brk (o che siano calcolate con lo stesso aspect-ratio)
+    fattori sizes:
+      hr: fattore per ottenere il valore h moltiplicando hr * w
+      wr: fattore per ottenere il valore w moltiplicando wr * h
+
+    add_img_sizes: se true ai tag img e source vengono aggiunte width e height (dimensioni
+                   dei file originali)
 
 
 
@@ -91,10 +86,10 @@ Esempio OUTPUT
 #}
 
 {% set alt = alt is defined? alt : '' %}
-{% set lazyload = lazyload is defined? lazyload : true %}
+{% set native_lazyload = native_lazyload is defined? native_lazyload : true %}
+{% set lazyload = native_lazyload? false : (lazyload is defined? lazyload : true) %}
 {% set async = async is defined? async : true %}
-{% set preload = preload is defined? preload : false %}
-{% set add_default_sizes = add_default_sizes is defined? add_default_sizes : false %}
+{% set add_img_sizes = add_img_sizes is defined? add_img_sizes : true %}
 {% set class = class is defined ? class : '' %}
 {% set lqip = lqip is defined ? lqip : null %}
 {% set densita_max = densita_max is defined ? densita_max : 2 %}
@@ -117,9 +112,9 @@ Esempio OUTPUT
     {%- if img.mime|default() == 'image/svg+xml' -%}
       <img
         {{- lazyload? ' data-' : ' ' -}} src="{{ viewer ~ img.id|default() }}"
-        {%- if lazyload %} loading="lazy"{% endif %}
+        {%- if lazyload or native_lazyload %} loading="lazy"{% endif %}
         {{- ' ' -}} alt="{{ alt }}"
-        {%- if add_default_sizes %} width="{{ img.width }}" height="{{ img.height }}"{% endif %}
+        {%- if add_img_sizes %} width="{{ img.width }}" height="{{ img.height }}"{% endif %}
         {%- if class %} class="{{ class }}"{% endif %}
         {%- if attrs|default() %} {{ attrs|raw }}{% endif %} alt="{{ alt }}">
 
@@ -131,6 +126,14 @@ Esempio OUTPUT
           {% set this_img = params.img is defined and params.img is not null ? params.img : img %}
           {% set img_base_url = viewer ~ this_img.id|default() %}
           {% set last_breakpoint = loop.last %}
+
+          {# calcolo w e h da fattore proporzionale #}
+          {%- if params.wr is defined and params.h|default(null) is not null -%}
+            {% set params = params|merge({w: (params.h * params.wr)|round(0, 'ceil')}) %}
+          {%- endif -%}
+          {%- if params.hr is defined and params.w|default(null) is not null -%}
+            {% set params = params|merge({h: (params.w * params.hr)|round(0, 'ceil')}) %}
+          {%- endif -%}
 
           {%- for formato in (local? ['default'] : ['webp', 'default']) -%}
             {%- set f_param = [] -%}
@@ -178,11 +181,11 @@ Esempio OUTPUT
               <img
                 {{- (lazyload and (not lqip))? ' data-' : ' ' -}} src="{{ lqip? lqip : srcset[0] }}"
                 {{- lazyload? ' data-' : ' ' -}} srcset="{{ srcset|slice(1)|join(', ') }}"
-                {%- if lazyload %} loading="lazy"{% endif %}
+                {%- if lazyload or native_lazyload %} loading="lazy"{% endif %}
                 {%- if async %} decoding ="async"{% endif %}
                 {{- ' ' -}} alt="{{ alt }}"
                 {%- if class %} class="{{ class }}"{% endif %}
-                {%- if add_default_sizes %} width="{{ img.width }}" height="{{ img.height }}"{% endif %}
+                {%- if add_img_sizes %} width="{{ this_img.width }}" height="{{ this_img.height }}"{% endif %}
                 {%- if test %} data-brkp="{{ breakpoint }}"{% endif -%}
                 {%- if attrs|default() %} {{ attrs|raw }}{% endif -%}>
 
@@ -192,6 +195,7 @@ Esempio OUTPUT
                 {{- lazyload? ' data-' : ' ' -}} srcset="{{ srcset|join(', ') }}"
                 {%- if formato == 'webp' %} type="image/webp"{% endif -%}
                 {%- if breakpoint != 'all' %} media="{{ mediaqueries[breakpoint] }}"{% endif -%}
+                {%- if add_img_sizes %} width="{{ this_img.width }}" height="{{ this_img.height }}"{% endif %}
                 {%- if test %} data-brkp="{{ breakpoint }}"{% endif %}>
 
             {%- endif -%}

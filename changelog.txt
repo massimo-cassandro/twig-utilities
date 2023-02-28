@@ -2,3 +2,4 @@
 2023-02-20T12:08:35.125Z |      1.0.1 | naming fix
 2023-02-20T12:18:13.396Z |      1.0.2 | Update
 2023-02-24T17:56:55.479Z |      1.0.3 | Fix
+2023-02-28T10:29:07.443Z |      2.0.0 | rinominati alcuni files, `img-viewer`: rinominato parametro `add_default_sizes` in `add_img_sizes` con default `true`
