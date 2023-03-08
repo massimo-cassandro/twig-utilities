@@ -3,3 +3,4 @@
 2023-02-20T12:18:13.396Z |      1.0.2 | Update
 2023-02-24T17:56:55.479Z |      1.0.3 | Fix
 2023-02-28T10:29:07.443Z |      2.0.0 | rinominati alcuni files, `img-viewer`: rinominato parametro `add_default_sizes` in `add_img_sizes` con default `true`
+2023-03-08T10:00:46.045Z |      2.1.0 | flash-message js src
