@@ -37,14 +37,20 @@ export default function(container=document) {
     };
 
   multiselects.forEach( item => {
+
+    const btn = item.querySelector('.btn'),
+      drpdown = item.querySelector('.dropdown-menu'),
+      closeOnClick = item.hasAttribute('data-close-on-click');
+
     item.querySelectorAll('[type="checkbox"], [type="radio"]').forEach( el => {
       el.addEventListener('click', () => {
         setMultiselectPlaceholder(item);
+        if(closeOnClick) {
+           btn.click();
+        }
       }, false);
     });
 
-    const btn = item.querySelector('.btn'),
-      drpdown = item.querySelector('.dropdown-menu');
 
     btn.addEventListener('click', () => {
       drpdown.classList.toggle('show');
