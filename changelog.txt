@@ -6,3 +6,4 @@
 2023-03-08T10:00:46.045Z |            2.1.0 | flash-message js src
 2023-04-14T15:36:12.648Z |            2.2.0 | multiselect: close-on-click option
 2023-04-17T08:10:52.801Z |            3.0.0 | form utilities files removed
+2023-05-02T10:34:52.195Z |            3.0.1 | fix contenuti
