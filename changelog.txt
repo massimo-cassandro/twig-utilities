@@ -7,3 +7,4 @@
 2023-04-14T15:36:12.648Z |            2.2.0 | multiselect: close-on-click option
 2023-04-17T08:10:52.801Z |            3.0.0 | form utilities files removed
 2023-05-02T10:34:52.195Z |            3.0.1 | fix contenuti
+2023-07-18T13:10:42.000Z |            3.0.2 | fix
