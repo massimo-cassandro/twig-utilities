@@ -1,3 +1,6 @@
+2019-09-30T00:00:00.000Z |            0.1.0 | First release built on Symfony 3
+2020-10-30T00:00:00.000Z |            0.2.0 | Switch to Symfony 5. All js scripts rearranged as ES modules
+2020-11-30T00:00:00.000Z |            0.2.1 | Implemented `aria-describedby` attribute for help text. Inline radios and checkboxes fix. Option for using html strings for labels
 2023-02-17T11:26:50.123Z |            1.0.0 | First version from old package `m-utilities`
 2023-02-20T12:08:35.125Z |            1.0.1 | naming fix
 2023-02-20T12:18:13.396Z |            1.0.2 | Update
@@ -10,3 +13,4 @@
 2023-07-18T13:10:42.000Z |            3.0.2 | fix
 2023-07-19T09:53:58.056Z |            3.0.3 | legend: 'form-label' class
 2023-09-29T07:57:18.992Z |            3.0.4 | input type url form widget fix
+2023-09-29T08:12:46.649Z |            3.0.5 | readme fix
