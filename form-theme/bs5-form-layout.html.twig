@@ -8,6 +8,9 @@
 {#
   estende il template form base:
   `/vendor/symfony/symfony/src/Symfony/Bridge/Twig/Resources/views/Form/form_div_layout.html.twig`
+
+  sf6:
+  `vendor/symfony/twig-bridge/Resources/views/Form/form_div_layout.html.twig`
 #}
 {% use "form_div_layout.html.twig" %}
 
@@ -29,6 +32,8 @@
   {{- parent() -}}
 {%- endblock form_widget_simple %}
 
+
+
 {%- block widget_attributes -%}
   {%- if not valid %}
     {% set attr = attr|merge({class: (attr.class|default('') ~ ' is-invalid')|trim}) %}
@@ -43,6 +48,12 @@
   {%- set type = type|default('number') -%}
   {{ block('form_widget_simple') }}
 {%- endblock float_widget -%}
+
+{# added 3.0.4 #}
+{%- block url_widget -%}
+  {%- set type = 'url' -%}
+  {{ block('form_widget_simple') }}
+{%- endblock url_widget -%}
 
 {%- block form_errors -%}
   {%- if errors|length > 0 -%}
@@ -65,11 +76,11 @@
   {% if label is not same as(false) -%}
     {%- if compound is defined and compound -%}
       {%- set element = 'legend' -%}
+      {# {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' label')|trim}) -%} #}
     {%- else -%}
-      {%- set label_attr = label_attr|merge({for: id}) -%}
-    {%- endif -%}
+      {%- set label_attr = label_attr|merge({for: id, class: (label_attr.class|default('') ~ ' form-label')|trim}) -%}
 
-    {%- set label_attr = label_attr|merge({class: (label_attr.class|default('') ~ ' form-label')|trim}) -%}
+    {%- endif -%}
 
     {% if label is empty -%}
       {%- if label_format is not empty -%}

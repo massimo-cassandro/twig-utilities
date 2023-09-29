@@ -9,3 +9,4 @@
 2023-05-02T10:34:52.195Z |            3.0.1 | fix contenuti
 2023-07-18T13:10:42.000Z |            3.0.2 | fix
 2023-07-19T09:53:58.056Z |            3.0.3 | legend: 'form-label' class
+2023-09-29T07:57:18.992Z |            3.0.4 | input type url form widget fix
