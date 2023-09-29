@@ -20,7 +20,7 @@
   "scripts": {
     "UPD-version": "npx update-version",
     "upd @m": "npm update @massimo-cassandro/linters-config @massimo-cassandro/dev-utilities @massimo-cassandro/js-utilities",
-    "npm publish": "npm publish"
+    "npm-publish": "npm publish"
   },
   "browserslist": [
     "last 1 version",
