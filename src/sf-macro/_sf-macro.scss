@@ -14,7 +14,7 @@ $sf-macro-apply-odd-rows-borders: true; // false = no border
 $sf-macro-riga-odd-border: 1px solid #ccc; // righe dispari
 $sf-macro-even-bg-color: rgba($nero, .05); // righe pari
 $sf-macro-margin-bottom: .5rem;
-@import '@massimo-cassandro/m-utilities/boilerplate-src/std-macro/sf-macro';
+@import '@massimo-cassandro/twig-utilities/src/sf-macro/sf-macro';
 
 */
 
