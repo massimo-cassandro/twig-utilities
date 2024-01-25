@@ -1,5 +1,5 @@
 {#
-  include file uploader 2
+  include file-uploader v.3
 
   Crea il markup mecessario per l'attivazione dell'uploader
 
@@ -8,7 +8,7 @@
   STD
   ******************
 
-  {% include '@includes/file_uploader.html.twig' with {
+  {% include '_shared/file-uploader.html.twig' with {
     data: {
       uploader_legend: true,
       uploader_legend_text: '__legend__',
@@ -41,7 +41,7 @@
   TUTTI I PARAMETRI
   ******************
 
-  {% include '@includes/file_uploader.html.twig' with {
+  {% include '_shared/file-uploader.html.twig' with {
     id: null,
     attrs: null,
     viewer: path('inner_viewer'), // fac., default: path('inner_viewer')
@@ -95,8 +95,10 @@
         markup    : 'html_string'
         std_markup: {
           label: "label",
-          type : 'text|email|url|number|checkbox'
-          ,extra_class: null, // string
+          type : 'text|email|url|number|checkbox|select'
+          ,empty_first_option: true // solo select
+          ,options: null // solo select, oggetto nella forma {'id1': 'text 1', 'id2': ...}
+          ,extra_class: null // string
           ,attrs: null // string
         }
       }
@@ -110,10 +112,10 @@
     - data: opzioni fileuploader
     - values: array elementi preregistrati
     - extra_fields: campi aggiuntivi
-        -> extra_fields.value_key           <== viene aggiunto anche a values
-        -> extra_fields.use_rel_id: true    <== per far usare ai campi extra il rel_id
-        -> markup: 'html string'            <== markup specifico
-        -> std_markup: { }                  <== alternativa a markup, campi predefiniti
+        -> value_key                <== elemento di values (può essere anche nella forma `xxxx.yyy...`)
+        -> use_rel_id: true         <== per far usare ai campi extra il rel_id
+        -> markup: 'html string'    <== markup specifico
+        -> std_markup: { }          <== alternativa a markup, campi predefiniti
 
 
 #}
@@ -146,8 +148,14 @@
 
       {% if extra_fields %}
         {% for extra in extra_fields %}
-          {# {% set this_value = this_value|merge({(extra.value_key): row[extra.value_key]}) %} #}
-          {% set this_value = this_value|merge({(extra.value_key): attribute(row, extra.value_key)}) %}
+          {# {% set this_value = this_value|merge({(extra.value_key): attribute(row, extra.value_key)}) %} #}
+
+          {% set this_extra_val = null %}
+          {%- for k in extra.value_key|split('.') -%}
+            {% set this_extra_val = this_extra_val is null? attribute(row, k) : attribute(this_extra_val, k) %}
+          {%- endfor -%}
+          {% set this_value = this_value|merge({(extra.value_key): this_extra_val}) %}
+
         {% endfor %}
       {% endif %}
 
@@ -193,9 +201,29 @@
               class="form-control form-control-sm {{- row.std_markup.extra_class|default()? ' ' ~ row.std_markup.extra_class : '' -}}" {{- ' ' -}}
               id="{{ row.value_key }}-{{ '{{idx}}' }}"  {{- ' ' -}}
               value="{{ '{{val}}' }}"  {{- ' ' -}}
-              name="{{ '{{name}}' }}"
+              name="{{ '{{name}}' }}"  {{- ' ' -}}
+              {%- if 'required' in  row.std_markup.attrs|default() %}required{% endif -%}
               {{- row.std_markup.attrs|default()? ' ' ~ row.std_markup.attrs : '' -}}
             >
+          </div>
+
+        {% elseif row.std_markup.type|lower == 'select' %}
+
+          <div class="form-group {%- if 'required' in  row.std_markup.attrs|default() %} required{% endif -%}">
+            <label class="form-label" for="{{ row.value_key }}-{{ '{{idx}}' }}">
+              {{- row.std_markup.label -}}
+            </label>
+            <select {{- ' ' -}}
+              class="form-select form-select-sm {{- row.std_markup.extra_class|default()? ' ' ~ row.std_markup.extra_class : '' -}}"  {{- ' ' -}}
+              id="{{ row.value_key }}-{{ '{{idx}}' }}"  {{- ' ' -}}
+              name="{{ '{{name}}' }}"  {{- ' ' -}}
+              {%- if 'required' in  row.std_markup.attrs|default() %}required{% endif -%}
+            >
+              {%- if row.std_markup.empty_first_option %}<option value=""></option>{% endif -%}
+              {% for key, text in row.std_markup.options|default() %}
+                <option {{- '{{selected}}' -}} value="{{ key }}">{{ text }}</option>
+              {% endfor %}
+            </select>
           </div>
 
         {% elseif row.std_markup.type|lower == 'checkbox' %}
@@ -207,7 +235,7 @@
                 name="{{ '{{name}}' }}"  {{- ' ' -}}
                 value="1"  {{- ' ' -}}
                 id="{{ row.value_key }}-{{ '{{idx}}' }}"
-                {{- ' {{checked}} ' -}}
+                {{- '{{checked}}' -}}
                 {{- row.std_markup.attrs|default()? ' ' ~ row.std_markup.attrs : '' -}}
               >
               <label class="form-check-label {%- if 'required' in  row.std_markup.attrs|default() %} required{% endif -%}" {{- ' ' -}}
@@ -218,9 +246,10 @@
             </div>
           </div>
 
+          {# TODO altri tipi #}
+
         {% endif %}
 
-        {# TODO altri tipi #}
 
       {% endset %}
 

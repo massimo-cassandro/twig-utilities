@@ -1,7 +1,7 @@
 {
   "name": "@massimo-cassandro/twig-utilities",
   "description": "Twig utilities for Symfony apps",
-  "version": "3.0.7",
+  "version": "3.1.0",
   "license": "MIT",
   "author": "Massimo Cassandro",
   "main": "index.js",
@@ -44,10 +44,10 @@
     "twig-shared-includes/**/*.*"
   ],
   "devDependencies": {
-    "@massimo-cassandro/dev-utilities": "^1.9.4",
-    "@massimo-cassandro/linters-config": "^1.2.5"
+    "@massimo-cassandro/dev-utilities": "^1.21.2",
+    "@massimo-cassandro/linters-config": "^1.6.0"
   },
   "dependencies": {
-    "@massimo-cassandro/js-utilities": "^1.1.0"
+    "@massimo-cassandro/js-utilities": "^1.10.0"
   }
 }
