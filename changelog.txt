@@ -17,3 +17,4 @@
 2023-10-03T12:26:14.895Z |            3.0.6 | fix
 2023-12-19T16:50:33.206Z |            3.0.7 | fix
 2024-01-25T09:51:50.447Z |            3.1.0 | File uploader include: added support for `select` extra fields
+2024-01-25T10:20:25.329Z |            3.1.1 | fix

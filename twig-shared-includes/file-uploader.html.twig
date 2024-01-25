@@ -221,7 +221,7 @@
             >
               {%- if row.std_markup.empty_first_option %}<option value=""></option>{% endif -%}
               {% for key, text in row.std_markup.options|default() %}
-                <option {{- '{{selected}}' -}} value="{{ key }}">{{ text }}</option>
+                <option {{- ' {{selected}} ' -}} value="{{ key }}">{{ text }}</option>
               {% endfor %}
             </select>
           </div>
@@ -235,7 +235,7 @@
                 name="{{ '{{name}}' }}"  {{- ' ' -}}
                 value="1"  {{- ' ' -}}
                 id="{{ row.value_key }}-{{ '{{idx}}' }}"
-                {{- '{{checked}}' -}}
+                {{- ' {{checked}} ' -}}
                 {{- row.std_markup.attrs|default()? ' ' ~ row.std_markup.attrs : '' -}}
               >
               <label class="form-check-label {%- if 'required' in  row.std_markup.attrs|default() %} required{% endif -%}" {{- ' ' -}}
