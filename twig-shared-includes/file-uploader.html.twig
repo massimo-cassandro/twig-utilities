@@ -90,16 +90,17 @@
 
     ,extra_fields: [
       {
-        value_key : 'field_key',
-        use_rel_id: true,
-        markup    : 'html_string'
+        value_key      : 'field_key',
+        value_sub_key  : 'value_key_sub_key',
+        use_rel_id     : true,
+        markup         : 'html_string'
         std_markup: {
-          label: "label",
-          type : 'text|email|url|number|checkbox|select'
-          ,empty_first_option: true // solo select
-          ,options: null // solo select, oggetto nella forma {'id1': 'text 1', 'id2': ...}
-          ,extra_class: null // string
-          ,attrs: null // string
+          label                : "label",
+          type                 : 'text|email|url|number|checkbox|select'
+          ,empty_first_option  : true // solo select
+          ,options             : null // solo select, oggetto nella forma {'id1': 'text 1', 'id2': ...}
+          ,extra_class         : null // string
+          ,attrs               : null // string
         }
       }
     ]
@@ -112,10 +113,15 @@
     - data: opzioni fileuploader
     - values: array elementi preregistrati
     - extra_fields: campi aggiuntivi
-        -> value_key                <== elemento di values (può essere anche nella forma `xxxx.yyy...`)
-        -> use_rel_id: true         <== per far usare ai campi extra il rel_id
-        -> markup: 'html string'    <== markup specifico
-        -> std_markup: { }          <== alternativa a markup, campi predefiniti
+        -> value_key              <== chiave dell'array da usare per il `name`
+        -> value_sub_key          <== fac. Da usare nei casi in cui `value_key` sia un  oggetto e
+                                      l'effettivo valore sia in una chiave di `value_key`
+                                      (es: value_key: 'categoria', value_sub_key: 'id')
+                                      `value_sub_key`, può avere nidificazioni
+                                      (es: value_sub_key: 'subarray.id')
+        -> use_rel_id: true       <== per far usare ai campi extra il rel_id
+        -> markup: 'html string'  <== markup specifico
+        -> std_markup: { }        <== alternativa a markup, campi predefiniti
 
 
 #}
@@ -124,7 +130,7 @@
 {% set viewer = viewer is defined ? viewer : glob_vars.viewer %}
 
 {% set extra_fields = (extra_fields is defined and extra_fields is iterable and extra_fields|length)? extra_fields : null %}
-{% set  values = (values is defined and values is iterable and values|length)? values : null %}
+{% set values = (values is defined and values is iterable and values|length)? values : null %}
 {% set viewer_extra_params = viewer_extra_params is defined ? '&' ~ viewer_extra_params|join('&') : '' %}
 
 {% set parsed_values = null %}
@@ -148,13 +154,17 @@
 
       {% if extra_fields %}
         {% for extra in extra_fields %}
-          {# {% set this_value = this_value|merge({(extra.value_key): attribute(row, extra.value_key)}) %} #}
 
-          {% set this_extra_val = null %}
-          {%- for k in extra.value_key|split('.') -%}
-            {% set this_extra_val = this_extra_val is null? attribute(row, k) : attribute(this_extra_val, k) %}
-          {%- endfor -%}
-          {% set this_value = this_value|merge({(extra.value_key): this_extra_val}) %}
+          {%- if extra.value_sub_key|default() -%}
+            {% set this_extra_val = attribute(row, extra.value_key) %}
+            {%- for k in extra.value_sub_key|split('.') -%}
+              {% set this_extra_val = attribute(this_extra_val, k) %}
+            {%- endfor -%}
+            {% set this_value = this_value|merge({(extra.value_key): this_extra_val}) %}
+
+          {%- else -%}
+            {% set this_value = this_value|merge({(extra.value_key): attribute(row, extra.value_key)}) %}
+          {%- endif -%}
 
         {% endfor %}
       {% endif %}
