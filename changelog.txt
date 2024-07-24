@@ -21,3 +21,4 @@
 2024-01-25T10:54:59.578Z |            3.1.2 | fix
 2024-01-25T16:34:27.766Z |            3.1.3 | File uploader include moved to file uploader repo
 2024-05-14T10:14:20.153Z |            3.1.4 | Upd
+2024-07-24T13:34:41.322Z |            3.1.5 | Fix help text on multiselect
