@@ -144,7 +144,7 @@
 {% block form_container_end -%}
   {{- form_errors(form) -}}
 
-  {%- if (not compound) or params.multiselect -%}
+  {%- if (not compound) or params.multiselect|default() -%}
     {{- block('form_help') -}}
   {%- endif -%}
 
@@ -200,7 +200,7 @@
     {{- block('form_container_start') -}}
     {{- form_label(form) -}}
 
-    {%- if compound and not params.multiselect -%}
+    {%- if compound and not params.multiselect|default() -%}
       {{- block('form_help') -}}
     {%- endif -%}
   {% endif %}
