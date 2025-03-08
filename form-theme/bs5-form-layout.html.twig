@@ -198,12 +198,13 @@
 
   {%- if params.container == true and params.collection_container == true -%}
     {{- block('form_container_start') -}}
-    {{- form_label(form) -}}
-
-    {%- if compound and not params.multiselect|default() -%}
-      {{- block('form_help') -}}
-    {%- endif -%}
   {% endif %}
+
+  {{- form_label(form) -}}
+
+  {%- if compound and not params.multiselect|default() -%}
+    {{- block('form_help') -}}
+  {%- endif -%}
 
   {%- if (not params.before) and (not params.after) -%}
     {{- form_widget(form) -}}

@@ -1,7 +1,7 @@
 {
   "name": "@massimo-cassandro/twig-utilities",
   "description": "Twig utilities for Symfony apps",
-  "version": "3.1.6",
+  "version": "3.1.7",
   "license": "MIT",
   "author": "Massimo Cassandro",
   "main": "index.js",
